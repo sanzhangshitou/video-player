@@ -56,3 +56,7 @@ export function formatDate(date: Date): string {
   }
   return 'Just now';
 }
+
+export function encodeFilePath(path: string): string {
+  return `file://${encodeURI(path)}`;
+}

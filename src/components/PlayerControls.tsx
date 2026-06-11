@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import {
   Animated,
   Pressable,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '../theme/colors';
+import { CENTER_BUTTON_SHOW_MS } from '../theme/constants';
 import SeekBar from './SeekBar';
 
 interface PlayerControlsProps {
@@ -38,6 +39,15 @@ export default function PlayerControls({
   const opacity = useRef(new Animated.Value(1)).current;
   const centerOpacity = useRef(new Animated.Value(0)).current;
   const centerVisibleRef = useRef(false);
+  const centerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (centerTimerRef.current) {
+        clearTimeout(centerTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     Animated.timing(opacity, {
@@ -47,7 +57,7 @@ export default function PlayerControls({
     }).start();
   }, [visible, opacity]);
 
-  function showCenterButton() {
+  const showCenterButton = useCallback(() => {
     if (!centerVisibleRef.current) {
       centerVisibleRef.current = true;
       Animated.timing(centerOpacity, {
@@ -56,21 +66,32 @@ export default function PlayerControls({
         useNativeDriver: true,
       }).start();
 
-      setTimeout(() => {
+      if (centerTimerRef.current) {
+        clearTimeout(centerTimerRef.current);
+      }
+      centerTimerRef.current = setTimeout(() => {
         centerVisibleRef.current = false;
         Animated.timing(centerOpacity, {
           toValue: 0,
           duration: 300,
           useNativeDriver: true,
         }).start();
-      }, 1200);
+      }, CENTER_BUTTON_SHOW_MS);
     }
-  }
+  }, [centerOpacity]);
 
-  function handlePlayPause() {
+  const handlePlayPause = useCallback(() => {
     showCenterButton();
     onPlayPause();
-  }
+  }, [showCenterButton, onPlayPause]);
+
+  const handleSkipBack = useCallback(() => {
+    onSeek(Math.max(0, currentTime - 10));
+  }, [onSeek, currentTime]);
+
+  const handleSkipForward = useCallback(() => {
+    onSeek(Math.min(duration, currentTime + 10));
+  }, [onSeek, duration, currentTime]);
 
   return (
     <TouchableWithoutFeedback onPress={onToggleVisible}>
@@ -119,7 +140,7 @@ export default function PlayerControls({
           />
           <View style={styles.controlRow}>
             <Pressable
-              onPress={() => onSeek(Math.max(0, currentTime - 10))}
+              onPress={handleSkipBack}
               style={styles.skipButton}
               hitSlop={12}
             >
@@ -138,7 +159,7 @@ export default function PlayerControls({
               )}
             </Pressable>
             <Pressable
-              onPress={() => onSeek(Math.min(duration, currentTime + 10))}
+              onPress={handleSkipForward}
               style={styles.skipButton}
               hitSlop={12}
             >
@@ -161,7 +182,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: Colors.overlayTop,
   },
   backButton: {
     width: 40,
@@ -228,7 +249,7 @@ const styles = StyleSheet.create({
   bottomBar: {
     paddingHorizontal: 12,
     paddingTop: 12,
-    backgroundColor: 'rgba(0,0,0,0.55)',
+    backgroundColor: Colors.overlayBottom,
     borderTopWidth: 1,
     borderTopColor: Colors.controlBorder,
   },

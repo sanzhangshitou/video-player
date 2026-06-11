@@ -73,6 +73,15 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         refreshing={loading}
         onRefresh={refresh}
+        getItemLayout={(_, index) => ({
+          length: 98,
+          offset: 98 * index,
+          index,
+        })}
+        maxToRenderPerBatch={8}
+        windowSize={5}
+        removeClippedSubviews={true}
+        initialNumToRender={6}
         ListEmptyComponent={
           <EmptyState
             permissionGranted={permissionGranted}

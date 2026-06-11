@@ -15,6 +15,8 @@ interface SeekBarProps {
   onSeek: (time: number) => void;
 }
 
+const THUMB_SIZE = 12;
+
 export default function SeekBar({
   currentTime,
   duration,
@@ -35,24 +37,30 @@ export default function SeekBar({
     [duration],
   );
 
+  const getTimeFromXRef = useRef(getTimeFromX);
+  getTimeFromXRef.current = getTimeFromX;
+
+  const onSeekRef = useRef(onSeek);
+  onSeekRef.current = onSeek;
+
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: evt => {
-        const time = getTimeFromX(evt.nativeEvent.locationX);
-        onSeek(time);
+        const time = getTimeFromXRef.current(evt.nativeEvent.locationX);
+        onSeekRef.current(time);
       },
       onPanResponderMove: evt => {
-        const time = getTimeFromX(evt.nativeEvent.locationX);
-        onSeek(time);
+        const time = getTimeFromXRef.current(evt.nativeEvent.locationX);
+        onSeekRef.current(time);
       },
     }),
   ).current;
 
-  const handleLayout = (e: LayoutChangeEvent) => {
+  const handleLayout = useCallback((e: LayoutChangeEvent) => {
     trackWidth.current = e.nativeEvent.layout.width;
-  };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -63,7 +71,7 @@ export default function SeekBar({
         onLayout={handleLayout}
         {...panResponder.panHandlers}
       >
-        <View style={[styles.trackBg]} />
+        <View style={styles.trackBg} />
         <View
           style={[
             styles.progress,
@@ -84,8 +92,6 @@ export default function SeekBar({
     </View>
   );
 }
-
-const THUMB_SIZE = 12;
 
 const styles = StyleSheet.create({
   container: {

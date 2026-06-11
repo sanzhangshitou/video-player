@@ -1,15 +1,7 @@
 import { Platform, PermissionsAndroid } from 'react-native';
+import { SUPPORTED_VIDEO_EXTENSIONS } from '../theme/constants';
 
-export const SUPPORTED_EXTENSIONS = [
-  '.mp4',
-  '.mov',
-  '.mkv',
-  '.avi',
-  '.webm',
-  '.3gp',
-  '.m4v',
-  '.wmv',
-];
+export { SUPPORTED_VIDEO_EXTENSIONS };
 
 export async function requestStoragePermission(): Promise<boolean> {
   if (Platform.OS === 'ios') {
@@ -43,7 +35,8 @@ export async function requestStoragePermission(): Promise<boolean> {
     );
 
     return legacyResult === PermissionsAndroid.RESULTS.GRANTED;
-  } catch {
+  } catch (error) {
+    console.warn('[Permissions] Failed to request storage permission:', error);
     return false;
   }
 }

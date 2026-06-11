@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { VideoItem } from '../types/video';
 import { Colors } from '../theme/colors';
@@ -8,10 +9,12 @@ interface VideoCardProps {
   onPress: (video: VideoItem) => void;
 }
 
-export default function VideoCard({ video, onPress }: VideoCardProps) {
+function VideoCard({ video, onPress }: VideoCardProps) {
+  const handlePress = useCallback(() => onPress(video), [onPress, video]);
+
   return (
     <Pressable
-      onPress={() => onPress(video)}
+      onPress={handlePress}
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
       <View style={styles.thumbnail}>
@@ -42,6 +45,8 @@ export default function VideoCard({ video, onPress }: VideoCardProps) {
     </Pressable>
   );
 }
+
+export default memo(VideoCard);
 
 const styles = StyleSheet.create({
   card: {

@@ -8,6 +8,7 @@ import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import AppNavigator from './src/navigation/AppNavigator';
+import { ErrorBoundary } from './src/components/ErrorBoundary';
 import { Colors } from './src/theme/colors';
 
 const DarkNavigationTheme = {
@@ -26,15 +27,17 @@ const DarkNavigationTheme = {
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
-      <NavigationContainer theme={DarkNavigationTheme}>
-        <AppNavigator />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <ErrorBoundary>
+      <SafeAreaProvider>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+        <NavigationContainer theme={DarkNavigationTheme}>
+          <AppNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </ErrorBoundary>
   );
 }

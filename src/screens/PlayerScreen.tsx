@@ -1,118 +1,77 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Video, {
-  OnLoadData,
-  OnProgressData,
-  VideoRef,
-} from 'react-native-video';
+import { useCallback } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Video from 'react-native-video';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../types/navigation';
 import { Colors } from '../theme/colors';
 import PlayerControls from '../components/PlayerControls';
+import { useVideoPlayback } from '../hooks/useVideoPlayback';
+import { encodeFilePath } from '../utils/format';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Player'>;
 
 export default function PlayerScreen({ route, navigation }: Props) {
   const { video } = route.params;
   const insets = useSafeAreaInsets();
-  const videoRef = useRef<VideoRef>(null);
 
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [controlsVisible, setControlsVisible] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const controlsTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Auto-hide controls after 3 seconds
-  const resetControlsTimer = useCallback(() => {
-    if (controlsTimerRef.current) {
-      clearTimeout(controlsTimerRef.current);
-    }
-    controlsTimerRef.current = setTimeout(() => {
-      setControlsVisible(false);
-    }, 3000);
-  }, []);
-
-  useEffect(() => {
-    if (controlsVisible) {
-      resetControlsTimer();
-    }
-    return () => {
-      if (controlsTimerRef.current) {
-        clearTimeout(controlsTimerRef.current);
-      }
-    };
-  }, [controlsVisible, resetControlsTimer]);
-
-  const toggleControls = useCallback(() => {
-    setControlsVisible(prev => !prev);
-  }, []);
-
-  const handleLoad = useCallback((data: OnLoadData) => {
-    setDuration(data.duration);
-    setHasError(false);
-  }, []);
-
-  const handleProgress = useCallback((data: OnProgressData) => {
-    setCurrentTime(data.currentTime);
-  }, []);
-
-  const handleEnd = useCallback(() => {
-    setIsPlaying(false);
-  }, []);
-
-  const handleError = useCallback(() => {
-    setHasError(true);
-    setIsPlaying(false);
-  }, []);
-
-  const handlePlayPause = useCallback(() => {
-    setIsPlaying(prev => !prev);
-  }, []);
-
-  const handleSeek = useCallback(
-    (time: number) => {
-      setCurrentTime(time);
-      videoRef.current?.seek(time);
-      resetControlsTimer();
-    },
-    [resetControlsTimer],
-  );
+  const {
+    videoRef,
+    isPlaying,
+    currentTime,
+    duration,
+    controlsVisible,
+    hasError,
+    toggleControls,
+    handleLoad,
+    handleProgress,
+    handleEnd,
+    handleError,
+    handlePlayPause,
+    handleSeek,
+    retry,
+    progressUpdateInterval,
+  } = useVideoPlayback();
 
   const handleBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
+  const handleRetry = useCallback(() => {
+    retry();
+  }, [retry]);
+
   if (hasError) {
     return (
       <View style={[styles.container, styles.errorContainer]}>
-        <Text style={styles.errorIcon}>⚠</Text>
+        <Text style={styles.errorIcon} accessibilityLabel="Error">
+          ⚠
+        </Text>
         <Text style={styles.errorTitle}>Playback Error</Text>
         <Text style={styles.errorMessage}>
           Unable to play "{video.name}".{'\n'}The file may be corrupted or in an
           unsupported format.
         </Text>
-        <Text style={styles.backLink} onPress={handleBack}>
-          Go Back
-        </Text>
+        <View style={styles.errorActions}>
+          <Pressable onPress={handleRetry} style={styles.retryButton}>
+            <Text style={styles.retryText}>Retry</Text>
+          </Pressable>
+          <Pressable onPress={handleBack}>
+            <Text style={styles.backLink}>Go Back</Text>
+          </Pressable>
+        </View>
       </View>
     );
   }
+
+  const videoUri = encodeFilePath(video.path);
 
   return (
     <View style={styles.container}>
       <Video
         ref={videoRef}
-        source={{ uri: `file://${video.path}` }}
-        style={[
-          styles.video,
-          {
-            paddingTop: insets.top,
-            paddingBottom: insets.bottom,
-          },
-        ]}
+        source={{ uri: videoUri }}
+        style={styles.video}
         paused={!isPlaying}
         resizeMode="contain"
         controls={false}
@@ -120,20 +79,31 @@ export default function PlayerScreen({ route, navigation }: Props) {
         onProgress={handleProgress}
         onEnd={handleEnd}
         onError={handleError}
-        progressUpdateInterval={250}
+        progressUpdateInterval={progressUpdateInterval}
       />
 
-      <PlayerControls
-        title={video.name}
-        isPlaying={isPlaying}
-        currentTime={currentTime}
-        duration={duration}
-        onPlayPause={handlePlayPause}
-        onSeek={handleSeek}
-        onBack={handleBack}
-        visible={controlsVisible}
-        onToggleVisible={toggleControls}
-      />
+      <View
+        style={[
+          styles.controlsContainer,
+          {
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+          },
+        ]}
+        pointerEvents="box-none"
+      >
+        <PlayerControls
+          title={video.name}
+          isPlaying={isPlaying}
+          currentTime={currentTime}
+          duration={duration}
+          onPlayPause={handlePlayPause}
+          onSeek={handleSeek}
+          onBack={handleBack}
+          visible={controlsVisible}
+          onToggleVisible={toggleControls}
+        />
+      </View>
     </View>
   );
 }
@@ -144,6 +114,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   video: {
+    ...StyleSheet.absoluteFill,
+  },
+  controlsContainer: {
     ...StyleSheet.absoluteFill,
   },
   errorContainer: {
@@ -167,6 +140,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 28,
+  },
+  errorActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 24,
+  },
+  retryButton: {
+    backgroundColor: Colors.accent,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
+  retryText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: Colors.textPrimary,
   },
   backLink: {
     fontSize: 16,

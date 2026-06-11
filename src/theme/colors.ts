@@ -15,4 +15,7 @@ export const Colors = {
 
   separator: 'rgba(255,255,255,0.08)',
   error: '#EF4444',
+
+  overlayTop: 'rgba(0,0,0,0.4)',
+  overlayBottom: 'rgba(0,0,0,0.55)',
 } as const;
