@@ -1,97 +1,120 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# AwesomePlayer
 
-# Getting Started
+A modern local video player built with React Native. Browse and play videos stored on your device with a clean, minimalist interface.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+- **Local Video Browser** — automatically scans your device for video files (.mp4, .mov, .mkv, .avi, .webm, .3gp, .m4v, .wmv)
+- **Full-Screen Player** — immersive playback with edge-to-edge rendering
+- **Custom Controls** — glassmorphism overlay with auto-hide, seek bar with drag support, and skip buttons
+- **Dark Theme** — OLED-optimized pure black background for cinematic viewing
+- **Smart Controls** — tap to reveal controls, auto-hide after 3 seconds
+- **Pull to Refresh** — re-scan for new videos with a pull gesture
+- **Android & iOS** — native stack navigation and platform-specific permissions
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Tech Stack
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+| Layer | Technology |
+|-------|------------|
+| Framework | React Native 0.86 (New Architecture + Hermes) |
+| Language | TypeScript 5.8 |
+| Navigation | React Navigation 7 (Native Stack) |
+| Video | react-native-video 6 |
+| File Access | react-native-fs |
+| Safe Areas | react-native-safe-area-context |
+| Linting | ESLint (`@react-native/eslint-config`) |
+| Formatting | Prettier |
+| Testing | Jest |
 
-```sh
-# Using npm
-npm start
+## Project Structure
 
-# OR using Yarn
-yarn start
+```
+src/
+├── types/
+│   ├── video.ts              # VideoItem data type
+│   └── navigation.ts         # Navigation param types
+├── theme/
+│   └── colors.ts             # Dark theme color palette
+├── utils/
+│   ├── format.ts             # Duration, file size, date formatters
+│   ├── permissions.ts        # Android storage permission handler
+│   └── videoScanner.ts       # Local filesystem video scanner
+├── hooks/
+│   └── useLocalVideos.ts     # Scan + permission + lifecycle hook
+├── components/
+│   ├── EmptyState.tsx         # Loading / no-permission / no-videos states
+│   ├── VideoCard.tsx          # Video list item with thumbnail & metadata
+│   ├── SeekBar.tsx            # Draggable progress bar
+│   └── PlayerControls.tsx     # Playback overlay (play/pause, seek, skip)
+├── screens/
+│   ├── HomeScreen.tsx         # Video list with FlatList
+│   └── PlayerScreen.tsx       # Full-screen video player
+└── navigation/
+    └── AppNavigator.tsx       # Stack navigator configuration
 ```
 
-## Step 2: Build and run your app
+## Getting Started
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+### Prerequisites
+
+- Node.js >= 22.11.0
+- React Native development environment ([Setup Guide](https://reactnative.dev/docs/set-up-your-environment))
+- Android: Android Studio with SDK 36
+- iOS: Xcode 16+
+
+### Install
+
+```sh
+npm install
+```
+
+#### iOS only
+
+```sh
+bundle install           # first time only
+cd ios && pod install && cd ..
+```
+
+### Run
+
+Start the Metro dev server:
+
+```sh
+npm start
+```
+
+Then open a second terminal:
+
+```sh
+# Android
+npm run android
+
+# iOS
+npm run ios
+```
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm start` | Start Metro dev server |
+| `npm run android` | Build & run on Android |
+| `npm run ios` | Build & run on iOS |
+| `npm test` | Run Jest tests |
+| `npm run lint` | Run ESLint |
+| `npm run format` | Auto-format code with Prettier |
+| `npm run format:check` | Check formatting (CI) |
+
+## Permissions
 
 ### Android
 
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
+The app requests `READ_MEDIA_VIDEO` (Android 13+) or `READ_EXTERNAL_STORAGE` (Android 12 and below) on first launch. If denied, you can grant it later via system Settings.
 
 ### iOS
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+No special permission is required. The app accesses videos from its own documents directory.
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+## License
 
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Private
