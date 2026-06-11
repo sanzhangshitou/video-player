@@ -26,8 +26,10 @@ Browse and play videos stored locally on your device. OLED-optimized dark interf
 - Automatically scans common directories for video files
 - Supports `.mp4` `.mov` `.mkv` `.avi` `.webm` `.3gp` `.m4v` `.wmv`
 - Displays file name, size, duration, and last-modified date
-- Pull-to-refresh re-scans the device
-- Skeleton loading state while scanning
+- Pull-to-refresh and manual refresh button to re-scan
+- Rescans automatically when returning from background
+- Skeleton loading with animated shimmer while scanning
+- Optimized `FlatList` with `getItemLayout` and windowing for smooth scrolling
 
 ### Player
 
@@ -37,7 +39,13 @@ Browse and play videos stored locally on your device. OLED-optimized dark interf
 - Draggable seek bar with live time display
 - ±10 second skip buttons
 - Large center play/pause indicator that fades after state change
-- Playback error screen with retry guidance
+- Retry button on playback errors
+
+### Stability
+
+- **Error Boundary** catches rendering crashes gracefully with a retry option
+- Skeleton shimmer uses native driver animation for fluid loading UX
+- Debounced refresh prevents duplicate scan requests
 
 ### Design
 
@@ -58,6 +66,7 @@ Browse and play videos stored locally on your device. OLED-optimized dark interf
 | Video      | `react-native-video`                     | 6       |
 | Filesystem | `react-native-fs`                        | 2       |
 | Safe Areas | `react-native-safe-area-context`         | 5       |
+| Screens    | `react-native-screens`                   | 4       |
 | Linting    | ESLint (`@react-native/eslint-config`)   | 8       |
 | Formatting | Prettier                                 | 2.8     |
 | Testing    | Jest (`@react-native/jest-preset`)       | 29      |
@@ -71,34 +80,39 @@ AwesomeProject/
 │   │   ├── video.ts              # VideoItem interface
 │   │   └── navigation.ts         # RootStackParamList
 │   ├── theme/
-│   │   └── colors.ts             # OLED dark color constants
+│   │   ├── colors.ts             # OLED dark color tokens
+│   │   └── constants.ts          # App-wide constants (extensions, limits)
 │   ├── utils/
-│   │   ├── format.ts             # Duration / file size / date formatters
+│   │   ├── format.ts             # Duration / file size / date formatters + URI encoding
 │   │   ├── permissions.ts        # Android permission request helper
 │   │   └── videoScanner.ts       # Recursive filesystem scan via RNFS
 │   ├── hooks/
-│   │   └── useLocalVideos.ts     # Permission → scan → refresh lifecycle
+│   │   ├── useLocalVideos.ts     # Permission → scan → refresh lifecycle
+│   │   ├── useAppState.ts        # AppState foreground listener
+│   │   └── useVideoPlayback.ts   # Video playback state & callbacks
 │   ├── components/
 │   │   ├── EmptyState.tsx        # Loading shimmer / no-permission / no-videos
-│   │   ├── VideoCard.tsx         # List item: thumbnail + name + size + date
+│   │   ├── ErrorBoundary.tsx     # React error boundary with retry
+│   │   ├── VideoCard.tsx         # List item: thumbnail + name + size + date (memoized)
 │   │   ├── SeekBar.tsx           # PanResponder-based draggable progress bar
 │   │   └── PlayerControls.tsx    # Glassmorphism overlay with all controls
 │   ├── screens/
 │   │   ├── HomeScreen.tsx        # FlatList with header and pull-to-refresh
-│   │   └── PlayerScreen.tsx      # Video component + controls + error handling
+│   │   └── PlayerScreen.tsx      # Video component + controls + error + retry
 │   └── navigation/
 │       └── AppNavigator.tsx      # Native stack (Home → Player)
 ├── __tests__/
-│   └── App.test.tsx
+│   ├── App.test.tsx              # App render smoke test
+│   └── format.test.ts            # Format utility unit tests (27 cases)
 ├── __mocks__/
 │   ├── react-native-fs.ts
 │   └── react-native-video.ts
 ├── android/                      # Android native project
 ├── ios/                          # iOS native project
-├── App.tsx                       # Entry: SafeAreaProvider + NavigationContainer
+├── App.tsx                       # Entry: ErrorBoundary + SafeAreaProvider + NavigationContainer
 ├── index.js                      # App registry
 ├── package.json
-├── tsconfig.json
+├── tsconfig.json                 # strict: true
 ├── .editorconfig
 ├── .eslintrc.js
 ├── .prettierrc.js
@@ -118,15 +132,16 @@ requestStoragePermission()
   scanForVideos() ─── RNFS.readDir() (recursive, max depth 3)
         │
         ▼
-  useLocalVideos() ─── useState / useCallback / AppState listener
+  useLocalVideos() ─── useState / useEffect (initial) / useAppState (foreground)
         │
-        ├──► HomeScreen ──► FlatList ──► VideoCard (per item)
+        ├──► HomeScreen ──► FlatList ──► VideoCard (memo) per item
         │
         └──► PlayerScreen ◄── navigation.navigate('Player', { video })
                  │
+                 ├──► useVideoPlayback() ──► video state + callbacks
                  ├──► <Video> (react-native-video)
                  └──► <PlayerControls>
-                          ├── SeekBar (PanResponder)
+                          ├── SeekBar (PanResponder with ref pattern)
                           └── Auto-hide timer (3s)
 ```
 
@@ -147,6 +162,9 @@ NativeStackNavigator
 | **No state management lib**           | Only 2 screens with clear data flow — `useState` + `useCallback` suffices              |
 | **No thumbnail generation**           | Keeps initial build lean; placeholder gradient + play icon works instantly             |
 | **`react-native-fs` over CameraRoll** | Scans arbitrary directories (Downloads, SD cards), not just the media library          |
+| **Error Boundary**                    | Catches render-time crashes so the app degrades gracefully instead of whitescreening   |
+| **Hook extraction**                   | `useAppState` and `useVideoPlayback` keep screens thin and improve testability         |
+| **`strict: true` TypeScript**         | Catches `undefined` access and type errors at compile time                             |
 
 ## Getting Started
 
@@ -190,7 +208,7 @@ npm run ios              # iOS simulator (macOS)
 ### Test
 
 ```sh
-npm test                # Jest unit tests
+npm test                # Jest (28 tests: App smoke + 27 format utilities)
 npm run lint            # ESLint
 npm run format:check    # Prettier check
 npm run format          # Prettier auto-fix
