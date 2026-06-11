@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Native build artifacts
+android/app/build/
+android/app/.cxx/
+android/build/
+android/.gradle/
+ios/Pods/
+ios/build/
+
+# Metro
+.metro-health-check*
+
+# Coverage
+coverage/
+
+# Bundle
+.bundle/
+vendor/bundle/
+
+# Yarn
+.yarn/
+
+# Xcode asset catalogs
+**/*.xcassets/**/*.json
+
+# Generated
+*.jsbundle

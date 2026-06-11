@@ -59,6 +59,7 @@ yarn-error.log
 # Ruby / CocoaPods
 **/Pods/
 /vendor/bundle/
+.bundle/
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
@@ -73,3 +74,18 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# TypeScript
+*.tsbuildinfo
+
+# React Native
+android/app/src/main/assets/index.android.bundle
+ios/main.jsbundle
+
+# IDE / Editor
+.vscode/
+*.swp
+*.swo
+*~
+
+.claude
