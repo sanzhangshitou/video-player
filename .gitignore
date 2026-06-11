@@ -84,8 +84,12 @@ ios/main.jsbundle
 
 # IDE / Editor
 .vscode/
+.idea/
 *.swp
 *.swo
 *~
-
+.cursor/
+.cursorrules
 .claude
+.zed/
+
