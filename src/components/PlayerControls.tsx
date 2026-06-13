@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Animated,
   Pressable,
@@ -36,6 +37,7 @@ export default function PlayerControls({
   onToggleVisible,
 }: PlayerControlsProps) {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const opacity = useRef(new Animated.Value(1)).current;
   const centerOpacity = useRef(new Animated.Value(0)).current;
   const centerVisibleRef = useRef(false);
@@ -96,7 +98,6 @@ export default function PlayerControls({
   return (
     <TouchableWithoutFeedback onPress={onToggleVisible}>
       <View style={styles.container}>
-        {/* Top gradient bar */}
         <Animated.View
           style={[styles.topBar, { opacity, paddingTop: insets.top + 8 }]}
         >
@@ -109,7 +110,6 @@ export default function PlayerControls({
           <View style={styles.backButton} />
         </Animated.View>
 
-        {/* Center play/pause button */}
         <Animated.View
           style={[styles.centerButton, { opacity: centerOpacity }]}
           pointerEvents="none"
@@ -126,7 +126,6 @@ export default function PlayerControls({
           </View>
         </Animated.View>
 
-        {/* Bottom controls */}
         <Animated.View
           style={[
             styles.bottomBar,
@@ -144,7 +143,7 @@ export default function PlayerControls({
               style={styles.skipButton}
               hitSlop={12}
             >
-              <Text style={styles.skipText}>-10s</Text>
+              <Text style={styles.skipText}>{t('player.skipBack')}</Text>
             </Pressable>
             <Pressable onPress={handlePlayPause} style={styles.playButton}>
               {isPlaying ? (
@@ -163,7 +162,7 @@ export default function PlayerControls({
               style={styles.skipButton}
               hitSlop={12}
             >
-              <Text style={styles.skipText}>+10s</Text>
+              <Text style={styles.skipText}>{t('player.skipForward')}</Text>
             </Pressable>
           </View>
         </Animated.View>

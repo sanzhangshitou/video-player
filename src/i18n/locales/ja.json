@@ -1,0 +1,46 @@
+{
+  "home": {
+    "title": "動画",
+    "videoCount_other": "{{count}} 本の動画"
+  },
+  "player": {
+    "playbackError": "再生エラー",
+    "errorMessage": "\"{{name}}\" を再生できません。\nファイルが破損しているか、サポートされていない形式の可能性があります。",
+    "retry": "再試行",
+    "goBack": "戻る",
+    "skipBack": "10秒戻る",
+    "skipForward": "10秒進む"
+  },
+  "empty": {
+    "permissionTitle": "ストレージ権限が必要です",
+    "permissionSubtitle": "端末に保存されている動画を閲覧・再生するには権限を許可してください。",
+    "openSettings": "設定を開く",
+    "noVideosTitle": "動画が見つかりません",
+    "noVideosSubtitle": "この端末に動画ファイルが見つかりませんでした。動画を追加してからもう一度お試しください。",
+    "scanAgain": "再スキャン",
+    "settingsAlertTitle": "エラー",
+    "settingsAlertMessage": "設定を開けません。ストレージ権限を手動で許可してください。"
+  },
+  "errorBoundary": {
+    "title": "問題が発生しました",
+    "fallbackMessage": "予期しないエラーが発生しました。",
+    "tryAgain": "再試行"
+  },
+  "format": {
+    "durationFallback": "--:--",
+    "sizeFallback": "0 B",
+    "sizeUnits": ["B", "KB", "MB", "GB", "TB"],
+    "justNow": "たった今",
+    "minAgo_other": "{{count}} 分前",
+    "hourAgo_other": "{{count}} 時間前",
+    "dayAgo_other": "{{count}} 日前"
+  },
+  "permissions": {
+    "videoTitle": "動画へのアクセス",
+    "videoMessage": "動画を表示・再生するために、お使いの動画へのアクセスが必要です。",
+    "storageTitle": "ストレージへのアクセス",
+    "storageMessage": "動画ファイルを検索するためにストレージへのアクセスが必要です。",
+    "allow": "許可",
+    "deny": "拒否"
+  }
+}

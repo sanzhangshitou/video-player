@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Video from 'react-native-video';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -14,6 +15,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Player'>;
 export default function PlayerScreen({ route, navigation }: Props) {
   const { video } = route.params;
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   const {
     videoRef,
@@ -44,20 +46,19 @@ export default function PlayerScreen({ route, navigation }: Props) {
   if (hasError) {
     return (
       <View style={[styles.container, styles.errorContainer]}>
-        <Text style={styles.errorIcon} accessibilityLabel="Error">
+        <Text style={styles.errorIcon} accessibilityLabel={t('player.playbackError')}>
           ⚠
         </Text>
-        <Text style={styles.errorTitle}>Playback Error</Text>
+        <Text style={styles.errorTitle}>{t('player.playbackError')}</Text>
         <Text style={styles.errorMessage}>
-          Unable to play "{video.name}".{'\n'}The file may be corrupted or in an
-          unsupported format.
+          {t('player.errorMessage', { name: video.name })}
         </Text>
         <View style={styles.errorActions}>
           <Pressable onPress={handleRetry} style={styles.retryButton}>
-            <Text style={styles.retryText}>Retry</Text>
+            <Text style={styles.retryText}>{t('player.retry')}</Text>
           </Pressable>
           <Pressable onPress={handleBack}>
-            <Text style={styles.backLink}>Go Back</Text>
+            <Text style={styles.backLink}>{t('player.goBack')}</Text>
           </Pressable>
         </View>
       </View>

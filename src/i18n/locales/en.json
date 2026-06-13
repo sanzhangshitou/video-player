@@ -1,0 +1,50 @@
+{
+  "home": {
+    "title": "Videos",
+    "videoCount_one": "{{count}} video",
+    "videoCount_other": "{{count}} videos"
+  },
+  "player": {
+    "playbackError": "Playback Error",
+    "errorMessage": "Unable to play \"{{name}}\".\nThe file may be corrupted or in an unsupported format.",
+    "retry": "Retry",
+    "goBack": "Go Back",
+    "skipBack": "-10s",
+    "skipForward": "+10s"
+  },
+  "empty": {
+    "permissionTitle": "Storage Permission Needed",
+    "permissionSubtitle": "Grant access to browse and play videos stored on your device.",
+    "openSettings": "Open Settings",
+    "noVideosTitle": "No Videos Found",
+    "noVideosSubtitle": "No video files found on this device. Add some videos and try again.",
+    "scanAgain": "Scan Again",
+    "settingsAlertTitle": "Error",
+    "settingsAlertMessage": "Unable to open settings. Please grant storage permissions manually."
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "fallbackMessage": "An unexpected error occurred.",
+    "tryAgain": "Try Again"
+  },
+  "format": {
+    "durationFallback": "--:--",
+    "sizeFallback": "0 B",
+    "sizeUnits": ["B", "KB", "MB", "GB", "TB"],
+    "justNow": "Just now",
+    "minAgo_one": "{{count}} min ago",
+    "minAgo_other": "{{count}} mins ago",
+    "hourAgo_one": "{{count}} hour ago",
+    "hourAgo_other": "{{count}} hours ago",
+    "dayAgo_one": "{{count}} day ago",
+    "dayAgo_other": "{{count}} days ago"
+  },
+  "permissions": {
+    "videoTitle": "Video Access",
+    "videoMessage": "This app needs access to your videos to display and play them.",
+    "storageTitle": "Storage Access",
+    "storageMessage": "This app needs storage access to find video files.",
+    "allow": "Allow",
+    "deny": "Deny"
+  }
+}

@@ -1,6 +1,6 @@
 module.exports = {
   preset: '@react-native/jest-preset',
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|@react-navigation|react-native-screens|react-native-video|react-native-fs|react-native-safe-area-context)/)',
+    'node_modules/(?!(react-native|@react-native|@react-navigation|react-native-screens|react-native-video|react-native-fs|react-native-safe-area-context|i18next|react-i18next|react-native-localize)/)',
   ],
 };

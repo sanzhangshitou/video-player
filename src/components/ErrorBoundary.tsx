@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../theme/colors';
 
@@ -28,27 +29,44 @@ export class ErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <View style={styles.container}>
-          <Text style={styles.icon} accessibilityLabel="Error">
-            ⚠
-          </Text>
-          <Text style={styles.title}>Something went wrong</Text>
-          <Text style={styles.message}>
-            {this.state.error?.message ?? 'An unexpected error occurred.'}
-          </Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={this.handleReset}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.buttonText}>Try Again</Text>
-          </TouchableOpacity>
-        </View>
+        <ErrorBoundaryView
+          message={this.state.error?.message}
+          onReset={this.handleReset}
+        />
       );
     }
 
     return this.props.children;
   }
+}
+
+function ErrorBoundaryView({
+  message,
+  onReset,
+}: {
+  message?: string;
+  onReset: () => void;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.icon} accessibilityLabel={t('errorBoundary.title')}>
+        ⚠
+      </Text>
+      <Text style={styles.title}>{t('errorBoundary.title')}</Text>
+      <Text style={styles.message}>
+        {message ?? t('errorBoundary.fallbackMessage')}
+      </Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={onReset}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.buttonText}>{t('errorBoundary.tryAgain')}</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

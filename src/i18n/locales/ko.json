@@ -1,0 +1,46 @@
+{
+  "home": {
+    "title": "동영상",
+    "videoCount_other": "{{count}}개의 동영상"
+  },
+  "player": {
+    "playbackError": "재생 오류",
+    "errorMessage": "\"{{name}}\"을(를) 재생할 수 없습니다.\n파일이 손상되었거나 지원되지 않는 형식일 수 있습니다.",
+    "retry": "재시도",
+    "goBack": "뒤로",
+    "skipBack": "10초 뒤로",
+    "skipForward": "10초 앞으로"
+  },
+  "empty": {
+    "permissionTitle": "저장소 권한 필요",
+    "permissionSubtitle": "기기에 저장된 동영상을 탐색하고 재생하려면 권한을 허용하세요.",
+    "openSettings": "설정 열기",
+    "noVideosTitle": "동영상 없음",
+    "noVideosSubtitle": "이 기기에서 동영상 파일을 찾을 수 없습니다. 동영상을 추가한 후 다시 시도하세요.",
+    "scanAgain": "다시 스캔",
+    "settingsAlertTitle": "오류",
+    "settingsAlertMessage": "설정을 열 수 없습니다. 저장소 권한을 수동으로 허용하세요."
+  },
+  "errorBoundary": {
+    "title": "문제가 발생했습니다",
+    "fallbackMessage": "예상치 못한 오류가 발생했습니다.",
+    "tryAgain": "재시도"
+  },
+  "format": {
+    "durationFallback": "--:--",
+    "sizeFallback": "0 B",
+    "sizeUnits": ["B", "KB", "MB", "GB", "TB"],
+    "justNow": "방금",
+    "minAgo_other": "{{count}}분 전",
+    "hourAgo_other": "{{count}}시간 전",
+    "dayAgo_other": "{{count}}일 전"
+  },
+  "permissions": {
+    "videoTitle": "동영상 접근",
+    "videoMessage": "동영상을 표시하고 재생하려면 동영상에 접근해야 합니다.",
+    "storageTitle": "저장소 접근",
+    "storageMessage": "동영상 파일을 찾으려면 저장소 접근이 필요합니다.",
+    "allow": "허용",
+    "deny": "거부"
+  }
+}

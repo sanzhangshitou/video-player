@@ -1,5 +1,6 @@
 import { memo, useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { VideoItem } from '../types/video';
 import { Colors } from '../theme/colors';
 import { formatDuration, formatFileSize, formatDate } from '../utils/format';
@@ -10,6 +11,7 @@ interface VideoCardProps {
 }
 
 function VideoCard({ video, onPress }: VideoCardProps) {
+  const { t } = useTranslation();
   const handlePress = useCallback(() => onPress(video), [onPress, video]);
 
   return (
@@ -24,7 +26,7 @@ function VideoCard({ video, onPress }: VideoCardProps) {
         {video.duration > 0 && (
           <View style={styles.durationBadge}>
             <Text style={styles.durationText}>
-              {formatDuration(video.duration)}
+              {formatDuration(video.duration, t)}
             </Text>
           </View>
         )}
@@ -35,9 +37,9 @@ function VideoCard({ video, onPress }: VideoCardProps) {
           {video.name}
         </Text>
         <View style={styles.meta}>
-          <Text style={styles.metaText}>{formatFileSize(video.size)}</Text>
+          <Text style={styles.metaText}>{formatFileSize(video.size, t)}</Text>
           <View style={styles.dot} />
-          <Text style={styles.metaText}>{formatDate(video.mtime)}</Text>
+          <Text style={styles.metaText}>{formatDate(video.mtime, t)}</Text>
         </View>
       </View>
 

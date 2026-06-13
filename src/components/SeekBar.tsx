@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   LayoutChangeEvent,
   PanResponder,
@@ -23,6 +24,7 @@ export default function SeekBar({
   onSeek,
 }: SeekBarProps) {
   const trackWidth = useRef(0);
+  const { t } = useTranslation();
 
   const progress = duration > 0 ? currentTime / duration : 0;
 
@@ -64,7 +66,7 @@ export default function SeekBar({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.time}>{formatDuration(currentTime)}</Text>
+      <Text style={styles.time}>{formatDuration(currentTime, t)}</Text>
 
       <View
         style={styles.track}
@@ -88,7 +90,7 @@ export default function SeekBar({
         />
       </View>
 
-      <Text style={styles.time}>{formatDuration(duration)}</Text>
+      <Text style={styles.time}>{formatDuration(duration, t)}</Text>
     </View>
   );
 }

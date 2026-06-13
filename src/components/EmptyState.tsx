@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useCallback, useEffect, useRef } from 'react';
 import {
   Alert,
@@ -22,6 +23,7 @@ export default function EmptyState({
   loading,
   onRefresh,
 }: EmptyStateProps) {
+  const { t } = useTranslation();
   const shimmerAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -55,11 +57,11 @@ export default function EmptyState({
       }
     } catch {
       Alert.alert(
-        'Error',
-        'Unable to open settings. Please grant storage permissions manually.',
+        t('empty.settingsAlertTitle'),
+        t('empty.settingsAlertMessage'),
       );
     }
-  }, []);
+  }, [t]);
 
   if (loading) {
     const shimmerOpacity = shimmerAnim.interpolate({
@@ -69,20 +71,12 @@ export default function EmptyState({
 
     return (
       <View style={styles.container}>
-        <Animated.View
-          style={[styles.shimmerIconContainer, { opacity: shimmerOpacity }]}
-        >
+        <Animated.View style={[styles.shimmerIconContainer, { opacity: shimmerOpacity }]}>
           <View style={styles.shimmerIcon} />
         </Animated.View>
+        <Animated.View style={[styles.shimmerBar, { opacity: shimmerOpacity }]} />
         <Animated.View
-          style={[styles.shimmerBar, { opacity: shimmerOpacity }]}
-        />
-        <Animated.View
-          style={[
-            styles.shimmerBar,
-            styles.shimmerShort,
-            { opacity: shimmerOpacity },
-          ]}
+          style={[styles.shimmerBar, styles.shimmerShort, { opacity: shimmerOpacity }]}
         />
       </View>
     );
@@ -91,19 +85,17 @@ export default function EmptyState({
   if (!permissionGranted) {
     return (
       <View style={styles.container}>
-        <Text style={styles.emoji} accessibilityLabel="Permission required">
+        <Text style={styles.emoji} accessibilityLabel={t('empty.permissionTitle')}>
           🔐
         </Text>
-        <Text style={styles.title}>Storage Permission Needed</Text>
-        <Text style={styles.subtitle}>
-          Grant access to browse and play videos stored on your device.
-        </Text>
+        <Text style={styles.title}>{t('empty.permissionTitle')}</Text>
+        <Text style={styles.subtitle}>{t('empty.permissionSubtitle')}</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={handleOpenSettings}
           activeOpacity={0.8}
         >
-          <Text style={styles.buttonText}>Open Settings</Text>
+          <Text style={styles.buttonText}>{t('empty.openSettings')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -111,19 +103,17 @@ export default function EmptyState({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.emoji} accessibilityLabel="No videos found">
+      <Text style={styles.emoji} accessibilityLabel={t('empty.noVideosTitle')}>
         🎬
       </Text>
-      <Text style={styles.title}>No Videos Found</Text>
-      <Text style={styles.subtitle}>
-        No video files found on this device. Add some videos and try again.
-      </Text>
+      <Text style={styles.title}>{t('empty.noVideosTitle')}</Text>
+      <Text style={styles.subtitle}>{t('empty.noVideosSubtitle')}</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={onRefresh}
         activeOpacity={0.8}
       >
-        <Text style={styles.buttonText}>Scan Again</Text>
+        <Text style={styles.buttonText}>{t('empty.scanAgain')}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,0 +1,46 @@
+{
+  "home": {
+    "title": "视频",
+    "videoCount_other": "{{count}} 个视频"
+  },
+  "player": {
+    "playbackError": "播放错误",
+    "errorMessage": "无法播放 \"{{name}}\"。\n文件可能已损坏或格式不受支持。",
+    "retry": "重试",
+    "goBack": "返回",
+    "skipBack": "后退10秒",
+    "skipForward": "快进10秒"
+  },
+  "empty": {
+    "permissionTitle": "需要存储权限",
+    "permissionSubtitle": "授予权限以浏览和播放设备上存储的视频。",
+    "openSettings": "打开设置",
+    "noVideosTitle": "未发现视频",
+    "noVideosSubtitle": "此设备上未找到视频文件。请添加一些视频后重试。",
+    "scanAgain": "重新扫描",
+    "settingsAlertTitle": "错误",
+    "settingsAlertMessage": "无法打开设置。请手动授予存储权限。"
+  },
+  "errorBoundary": {
+    "title": "出了点问题",
+    "fallbackMessage": "发生了意外错误。",
+    "tryAgain": "重试"
+  },
+  "format": {
+    "durationFallback": "--:--",
+    "sizeFallback": "0 B",
+    "sizeUnits": ["B", "KB", "MB", "GB", "TB"],
+    "justNow": "刚刚",
+    "minAgo_other": "{{count}} 分钟前",
+    "hourAgo_other": "{{count}} 小时前",
+    "dayAgo_other": "{{count}} 天前"
+  },
+  "permissions": {
+    "videoTitle": "视频访问",
+    "videoMessage": "此应用需要访问您的视频以显示和播放。",
+    "storageTitle": "存储访问",
+    "storageMessage": "此应用需要存储访问权限以查找视频文件。",
+    "allow": "允许",
+    "deny": "拒绝"
+  }
+}

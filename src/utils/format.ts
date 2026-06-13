@@ -1,6 +1,8 @@
-export function formatDuration(seconds: number): string {
+import type { TFunction } from 'i18next';
+
+export function formatDuration(seconds: number, t?: TFunction): string {
   if (!seconds || seconds <= 0 || !isFinite(seconds)) {
-    return '--:--';
+    return t?.('format.durationFallback') ?? '--:--';
   }
 
   const h = Math.floor(seconds / 3600);
@@ -15,22 +17,22 @@ export function formatDuration(seconds: number): string {
   return `${m}:${pad(s)}`;
 }
 
-export function formatFileSize(bytes: number): string {
+export function formatFileSize(bytes: number, t?: TFunction): string {
   if (bytes <= 0) {
-    return '0 B';
+    return t?.('format.sizeFallback') ?? '0 B';
   }
 
-  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const units = t?.('format.sizeUnits') ?? ['B', 'KB', 'MB', 'GB', 'TB'];
   const k = 1024;
   const i = Math.min(
     Math.floor(Math.log(bytes) / Math.log(k)),
-    units.length - 1,
+    (Array.isArray(units) ? units.length : 5) - 1,
   );
 
-  return `${(bytes / Math.pow(k, i)).toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
+  return `${(bytes / Math.pow(k, i)).toFixed(i === 0 ? 0 : 1)} ${Array.isArray(units) ? units[i] : '?'}`;
 }
 
-export function formatDate(date: Date): string {
+export function formatDate(date: Date, t?: TFunction): string {
   const now = new Date();
   const diff = now.getTime() - date.getTime();
   const seconds = Math.floor(diff / 1000);
@@ -39,22 +41,22 @@ export function formatDate(date: Date): string {
   const days = Math.floor(hours / 24);
 
   if (days > 30) {
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString(undefined, {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
     });
   }
   if (days > 0) {
-    return `${days} day${days > 1 ? 's' : ''} ago`;
+    return t?.('format.dayAgo', { count: days }) ?? `${days} day${days > 1 ? 's' : ''} ago`;
   }
   if (hours > 0) {
-    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    return t?.('format.hourAgo', { count: hours }) ?? `${hours} hour${hours > 1 ? 's' : ''} ago`;
   }
   if (minutes > 0) {
-    return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+    return t?.('format.minAgo', { count: minutes }) ?? `${minutes} min${minutes > 1 ? 's' : ''} ago`;
   }
-  return 'Just now';
+  return t?.('format.justNow') ?? 'Just now';
 }
 
 export function encodeFilePath(path: string): string {

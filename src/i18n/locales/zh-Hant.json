@@ -1,0 +1,46 @@
+{
+  "home": {
+    "title": "影片",
+    "videoCount_other": "{{count}} 部影片"
+  },
+  "player": {
+    "playbackError": "播放錯誤",
+    "errorMessage": "無法播放 \"{{name}}\"。\n檔案可能已損壞或格式不受支援。",
+    "retry": "重試",
+    "goBack": "返回",
+    "skipBack": "後退10秒",
+    "skipForward": "快進10秒"
+  },
+  "empty": {
+    "permissionTitle": "需要儲存權限",
+    "permissionSubtitle": "授予權限以瀏覽和播放裝置上儲存的影片。",
+    "openSettings": "開啟設定",
+    "noVideosTitle": "未發現影片",
+    "noVideosSubtitle": "此裝置上未找到影片檔案。請新增一些影片後重試。",
+    "scanAgain": "重新掃描",
+    "settingsAlertTitle": "錯誤",
+    "settingsAlertMessage": "無法開啟設定。請手動授予儲存權限。"
+  },
+  "errorBoundary": {
+    "title": "發生錯誤",
+    "fallbackMessage": "發生了未預期的錯誤。",
+    "tryAgain": "重試"
+  },
+  "format": {
+    "durationFallback": "--:--",
+    "sizeFallback": "0 B",
+    "sizeUnits": ["B", "KB", "MB", "GB", "TB"],
+    "justNow": "剛剛",
+    "minAgo_other": "{{count}} 分鐘前",
+    "hourAgo_other": "{{count}} 小時前",
+    "dayAgo_other": "{{count}} 天前"
+  },
+  "permissions": {
+    "videoTitle": "影片存取",
+    "videoMessage": "此應用程式需要存取您的影片以顯示和播放。",
+    "storageTitle": "儲存空間存取",
+    "storageMessage": "此應用程式需要儲存空間存取權限以尋找影片檔案。",
+    "allow": "允許",
+    "deny": "拒絕"
+  }
+}

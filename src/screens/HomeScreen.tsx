@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
@@ -22,6 +23,7 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<NavigationProp>();
   const { videos, loading, permissionGranted, refresh } = useLocalVideos();
+  const { t } = useTranslation();
 
   const handleVideoPress = useCallback(
     (video: VideoItem) => {
@@ -41,13 +43,12 @@ export default function HomeScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerTitle}>Videos</Text>
+          <Text style={styles.headerTitle}>{t('home.title')}</Text>
           {!loading && (
             <Text style={styles.headerSubtitle}>
-              {videos.length} {videos.length === 1 ? 'video' : 'videos'}
+              {t('home.videoCount', { count: videos.length })}
             </Text>
           )}
         </View>
@@ -60,7 +61,6 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* List */}
       <FlatList
         data={videos}
         renderItem={renderItem}

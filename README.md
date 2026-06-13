@@ -1,6 +1,6 @@
-# AwesomePlayer
+# Noir
 
-> A modern, minimalist local video player for Android and iOS built with React Native.
+> An OLED-dark local video player for Android & iOS — built with React Native.
 
 <p align="center">
   <img src="https://img.shields.io/badge/react--native-0.86-61DAFB?style=flat&logo=react" alt="React Native" />
@@ -74,7 +74,7 @@ Browse and play videos stored locally on your device. OLED-optimized dark interf
 ## Project Structure
 
 ```
-AwesomeProject/
+noir/
 ├── src/
 │   ├── types/
 │   │   ├── video.ts              # VideoItem interface
@@ -182,8 +182,8 @@ NativeStackNavigator
 ### Install
 
 ```sh
-git clone <repo-url> AwesomePlayer
-cd AwesomePlayer
+git clone <repo-url> noir
+cd noir
 npm install
 ```
 
@@ -193,6 +193,8 @@ npm install
 bundle install          # first clone only
 cd ios && pod install && cd ..
 ```
+
+> If pod install fails, run `pod install --repo-update`.
 
 ### Run
 
@@ -225,7 +227,7 @@ The app requests permission on first launch:
 | `READ_MEDIA_VIDEO`      | 33+ (Android 13) | Access video files |
 | `READ_EXTERNAL_STORAGE` | ≤ 32             | Legacy fallback    |
 
-If denied, use the in-app "Open Settings" button or grant manually via **Settings → Apps → AwesomePlayer → Permissions**.
+If denied, use the in-app "Open Settings" button or grant manually via **Settings → Apps → Noir → Permissions**.
 
 ### iOS
 
@@ -267,4 +269,4 @@ No runtime permission is required. The app scans its own documents directory. To
 
 ## License
 
-[MIT](LICENSE) © 2026 AwesomePlayer
+[MIT](LICENSE) © 2026 Noir

@@ -1,9 +1,12 @@
 import { Platform, PermissionsAndroid } from 'react-native';
+import type { TFunction } from 'i18next';
 import { SUPPORTED_VIDEO_EXTENSIONS } from '../theme/constants';
 
 export { SUPPORTED_VIDEO_EXTENSIONS };
 
-export async function requestStoragePermission(): Promise<boolean> {
+export async function requestStoragePermission(
+  t?: TFunction,
+): Promise<boolean> {
   if (Platform.OS === 'ios') {
     return true;
   }
@@ -12,11 +15,12 @@ export async function requestStoragePermission(): Promise<boolean> {
     const result = await PermissionsAndroid.request(
       'android.permission.READ_MEDIA_VIDEO',
       {
-        title: 'Video Access',
+        title: t?.('permissions.videoTitle') ?? 'Video Access',
         message:
+          t?.('permissions.videoMessage') ??
           'This app needs access to your videos to display and play them.',
-        buttonPositive: 'Allow',
-        buttonNegative: 'Deny',
+        buttonPositive: t?.('permissions.allow') ?? 'Allow',
+        buttonNegative: t?.('permissions.deny') ?? 'Deny',
       },
     );
 
@@ -27,10 +31,12 @@ export async function requestStoragePermission(): Promise<boolean> {
     const legacyResult = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
       {
-        title: 'Storage Access',
-        message: 'This app needs storage access to find video files.',
-        buttonPositive: 'Allow',
-        buttonNegative: 'Deny',
+        title: t?.('permissions.storageTitle') ?? 'Storage Access',
+        message:
+          t?.('permissions.storageMessage') ??
+          'This app needs storage access to find video files.',
+        buttonPositive: t?.('permissions.allow') ?? 'Allow',
+        buttonNegative: t?.('permissions.deny') ?? 'Deny',
       },
     );
 
