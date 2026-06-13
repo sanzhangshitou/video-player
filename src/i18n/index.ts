@@ -28,16 +28,16 @@ function getBestLanguage(): string {
       }
     }
   } catch (e) {
-    console.warn('[i18n] Failed to detect device language, falling back to en:', e);
+    console.warn('[i18n] Failed to detect device language, falling back to zh-Hans:', e);
   }
-  return 'en';
+  return 'zh-Hans';
 }
 
 i18n.use(initReactI18next).init({
   compatibilityJSON: 'v4',
   resources,
   lng: getBestLanguage(),
-  fallbackLng: 'en',
+  fallbackLng: 'zh-Hans',
   interpolation: {
     escapeValue: false,
   },
